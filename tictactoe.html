@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  #board {
+    display: grid;
+    width: fit-content;
+    grid-template-columns: minmax(50px, 200px) minmax(50px, 200px) minmax(50px, 200px);
+    grid-template-rows: minmax(50px, 200px) minmax(50px, 200px) minmax(50px, 200px);
+    border: 1px solid grey;
+  }
+  .tile {
+    width: 100%;
+    height: 100%;
+    border: 1px solid grey;
+  }
+</style>
+<body>
+<p id="para">Tic Tac Toe</p>
+<div id="board">
+  <canvas id="c11" class="tile"></canvas>
+  <canvas id="c12" class="tile"></canvas>
+  <canvas id="c13" class="tile"></canvas>
+  <canvas id="c21" class="tile"></canvas>
+  <canvas id="c22" class="tile"></canvas>
+  <canvas id="c23" class="tile"></canvas>
+  <canvas id="c31" class="tile"></canvas>
+  <canvas id="c32" class="tile"></canvas>
+  <canvas id="c33" class="tile"></canvas>
+</div>
+<script>
+  class GameStates {
+    static NotReady = new GameState("Not ready")
+    static ReadyToStart = new GameState("Ready to start")
+    static ReadyToStart = new GameState("Ready to start")
+
+  }
+  function getTileCtx(row, column) {
+    const canvas = document.getElementById(`c${row}${column}`)
+    return canvas.getContext('2d')
+  }
+  function getCanvasDimensions(canvas) {
+    const width = canvas.width;
+    const height = canvas.height;
+    return { width, height };
+  }
+  function adjustCanvasDrawingDimensions(){
+    const canvases = document.getElementsByClassName('tile');
+    [...canvases].forEach(c => {
+      c.width = c.offsetWidth
+      c.height = c.offsetHeight
+    })
+  }
+  function drawCross(ctx) {
+    const padding = 5
+    const { height, width } = getCanvasDimensions(ctx.canvas)
+    ctx.beginPath();
+    ctx.moveTo(padding,padding);
+    ctx.lineTo(width - padding, height - padding)
+    ctx.moveTo(padding, height - padding)
+    ctx.lineTo(width - padding, padding)
+    ctx.strokeStyle = 'red'
+    ctx.stroke()
+  }
+  function drawCircle(ctx) {
+    const padding = 5
+    const { height, width } = getCanvasDimensions(ctx.canvas)
+    ctx.beginPath()
+    ctx.arc(width / 2, height / 2, Math.min(height / 2, width / 2) - padding, 0, 2 * Math.PI)
+    ctx.strokeStyle="blue"
+    ctx.stroke()
+  }
+  function initListeners() {
+    const canvases = document.getElementsByClassName('tile');
+    [...canvases].forEach(c => {
+      c.addEventListener("click", () => drawCross(c.getContext('2d')))
+    })
+  }
+  initListeners()
+  adjustCanvasDrawingDimensions()
+  console.log("Querying tile c32")
+  const ctx = getTileCtx(3,2)
+  console.log(ctx)
+  console.log("Canvas dimensions: ", getCanvasDimensions(ctx.canvas))
+  drawCross(ctx)
+  drawCircle(ctx)
+
+</script>
+</body>
+</html>
