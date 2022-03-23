@@ -18,7 +18,10 @@
   }
 </style>
 <body>
-<p id="para">Tic Tac Toe</p>
+<div>
+  <p id="para">Tic Tac Toe</p>
+  <button>Start</button>
+<div>
 <div id="board">
   <canvas id="c11" class="tile"></canvas>
   <canvas id="c12" class="tile"></canvas>
@@ -32,9 +35,8 @@
 </div>
 <script>
   class GameStates {
-    static NotReady = new GameState("Not ready")
-    static ReadyToStart = new GameState("Ready to start")
-    static ReadyToStart = new GameState("Ready to start")
+    static PlayerMove = new GameState("PlayerMove")
+    static ServerMove = new GameState("ServerMove")
 
   }
   function getTileCtx(row, column) {
@@ -75,9 +77,30 @@
   function initListeners() {
     const canvases = document.getElementsByClassName('tile');
     [...canvases].forEach(c => {
+      // get clicked tile
+      // send the id with move request to server
+      // parse the response and draw circle or cross if move is ok
       c.addEventListener("click", () => drawCross(c.getContext('2d')))
     })
   }
+
+  /* Game loop
+    - Select via radio what you play with and click Start
+    - Request to start is sent to server
+    - If Response is ok
+      - initialise board with listeners
+    - Else
+      - display error
+    - Display who is making a move
+      - If player is to move
+        - wait for player input, when received, send move request and swith to server move state.
+      - else
+        - wait for server move, when received mark a move, and switch to player move or terminate if game is over
+
+    2 states, player move, server move
+  */
+
+
   initListeners()
   adjustCanvasDrawingDimensions()
   console.log("Querying tile c32")
